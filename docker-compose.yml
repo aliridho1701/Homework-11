@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  app-tire:
+    driver: bridge
+
+services:
+  todo-app:
+    build: 
+    ports:
+      -3000-3000
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - app-tire
+    depends_on:
+      - pgsqldb
+  pgsqldb:
+    image: postgres:12
+    ports:
+      -"5432:5432"
+    networks:
+      -app-tire
+    env_file:
+      - .env
+    environment:
+      -POSTGRES_USER
+      -POSTGRES_DB
+      -POSTGRES_HOST
+      -POSTGRES_PASSWORD
+    volumes:
+      - .:/var/lib/postgresql/data
